@@ -11,6 +11,7 @@ class Bank:
     withdraw(): to withdraw amount
     getbalance(): to view the current balance
     """
+    bank_name = "MyBank"
     def __init__(self, name):
         self.name = name
         self.__balance = 0
@@ -28,8 +29,13 @@ class Bank:
     def getbalance(self):
         return f"Current Balance: {self.__balance}"
 
+    @staticmethod
+    def bank_info():
+        return f"Welcome to {Bank.bank_name}"
+
 name = input("Enter name:")
 person = Bank(name)
+print(person.bank_info())
 
 print("Select your option:\n----------------\n1. Deposit Amount\n2. Withdraw Amount\n3. Check Balance")
 choice = int(input("Enter your option:"))
@@ -42,3 +48,5 @@ match choice:
         print(person.withdraw(amount))
     case 3:
         print(person.getbalance())
+
+print(person._Bank__balance)
