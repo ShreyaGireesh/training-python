@@ -15,8 +15,18 @@ new_file_path = Path("new_name.txt")
 file_path.rename(new_file_path)
 
 # Check if the content is still the same
-content = new_file_path.read_text()
-print(f"Content of the renamed file: {content}")
+with open(new_file_path, 'r') as file:
+    content = file.read()
+    print(f"Contents before appending: {contents}")
+time.sleep(1)
+
+with open(new_file_path, 'a') as file:
+    file.write("\nThis is an appended line")
+    print("Appended new contents to the file")
+
+with open(new_file_path, 'r') as file:
+    content = file.read()
+    print(f"Contents after appending: {contents}")
 time.sleep(1)
 
 # Create a directory
