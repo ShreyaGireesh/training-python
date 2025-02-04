@@ -58,3 +58,4 @@ cart.checkout()
 
 # Simulate a critical error
 cart.cause_critical_issue()
+
