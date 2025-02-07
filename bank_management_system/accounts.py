@@ -9,28 +9,28 @@ from log_service import app_logger
 
 class AccountManager():
     def __init__(self, db):
-        self.db = db
+        self.__db = db
         self.transaction_manager = TransactionManager(db)
     
 
-    def generate_accountno(self):
-        self.db.cursor.execute("SELECT MAX(account_id) FROM accounts")
-        max_account_id = self.db.cursor.fetchone()[0]
+    def __generate_accountno(self):
+        self.__db.cursor.execute("SELECT MAX(account_id) FROM accounts")
+        max_account_id = self.__db.cursor.fetchone()[0]
         new_account_id = max_account_id + 1 if max_account_id is not None else 1
         app_logger.log('info', f"Generated new account number: ACC{new_account_id:07d}")
         return f"ACC{new_account_id:07d}"
 
     def create_account(self, user_id, account_type, pin):
         try:
-            self.db.connection.start_transaction()
-            account_number = self.generate_accountno()
+            self.__db.connection.start_transaction()
+            account_number = self.__generate_accountno()
             values=(account_number, user_id, pin, account_type)
-            self.db.cursor.execute(ACCOUNT_CREATION_Q, values)
-            self.db.connection.commit()
+            self.__db.cursor.execute(ACCOUNT_CREATION_Q, values)
+            self.__db.connection.commit()
             self.display_account_details(account_number)
             app_logger.log('info', f"Successfully created {account_type} account for user {user_id}, Account number: {account_number}")
         except mysql.connector.Error as err:
-            pp_logger.log('error', f"Error while creating account for user {user_id}: {err}")
+            app_logger.log('error', f"Error while creating account for user {user_id}: {err}")
             print(f"Error while creating user: {err}")
             self.db.connection.rollback()
             return None 
@@ -39,14 +39,14 @@ class AccountManager():
         """Fetch account details from the database and display them in a creative format."""
         try:
             # Fetch account details from the database
-            self.db.cursor.execute(
+            self.__db.cursor.execute(
                 "SELECT a.account_number, a.account_type, a.balance, u.user_id, u.user_name, u.phone_no, u.address, u.email, u.dob, u.gender "
                 "FROM accounts a "
                 "JOIN users u ON a.user_id = u.user_id "
                 "WHERE a.account_number = %s", 
                 (account_number,)
             )
-            account_details = self.db.cursor.fetchone()
+            account_details = self.__db.cursor.fetchone()
 
             if account_details:
                 app_logger.log('info', f"Fetched account details for {account_number}")
@@ -80,8 +80,8 @@ class AccountManager():
         try:
             
             values = (account_number, pin)
-            self.db.cursor.execute(GET_BALANCE_Q, values)
-            result = self.db.cursor.fetchone()
+            self.__db.cursor.execute(GET_BALANCE_Q, values)
+            result = self.__db.cursor.fetchone()
 
             if result:
                 balance = result[0]
@@ -100,8 +100,8 @@ class AccountManager():
         try:
             
             values = (account_number, pin)
-            self.db.cursor.execute(GET_ACCOUNT_Q, values)
-            result = self.db.cursor.fetchone()
+            self.__db.cursor.execute(GET_ACCOUNT_Q, values)
+            result = self.__db.cursor.fetchone()
             if result:
                 account_id, account_type, balance = result
                 app_logger.log('info', f"Fetched account details for account {account_number}: {account_type}, Balance: Rs.{balance:.2f}")
@@ -118,34 +118,32 @@ class AccountManager():
         try:
             
             values = (account_id,)
-            self.db.cursor.execute(DEPOSIT_AMOUNT_Q, values)
-            current_balance = self.db.cursor.fetchone()
+            self.__db.cursor.execute(DEPOSIT_AMOUNT_Q, values)
+            current_balance = self.__db.cursor.fetchone()
 
             new_balance = current_balance[0] + Decimal(amount)
-            self.db.cursor.execute("UPDATE accounts SET balance = %s WHERE account_id =%s",(new_balance, account_id))
-            self.db.connection.commit() 
+            self.__db.cursor.execute("UPDATE accounts SET balance = %s WHERE account_id =%s",(new_balance, account_id))
+            self.__db.connection.commit() 
             self.transaction_manager.add_transaction(account_id=account_id, amount=amount,balance_after=new_balance, transaction_type="deposit", description="Amount deposited")
             app_logger.log('info', f"Deposited Rs {amount} to account ID {account_id}. New balance: Rs.{new_balance:.2f}")
             print(SUCCESS_AMT_DEPOSIT)
         except mysql.connector.Error as err:
             app_logger.log('error', f"Error while depositing amount to account {account_id}: {err}")
             print(f"Error while creating user: {err}")
-            self.db.connection.rollback()
+            self.__db.connection.rollback()
             return None 
-        finally:
-            self.db.close()
 
     def update_balance(self, account_id, balance):
         try:
             
             values = (balance, account_id)
-            self.db.cursor.execute(UPDATE_BALANCE_Q, values)
-            self.db.connection.commit()
+            self.__db.cursor.execute(UPDATE_BALANCE_Q, values)
+            self.__db.connection.commit()
             app_logger.log('info', f"Updated balance for account ID {account_id} to Rs.{balance:.2f}")
         except mysql.connector.Error as err:
             app_logger.log('error', f"Error updating balance for account ID {account_id}: {err}")
             print(f"Error updating balance: {err}")
-            self.db.connection.rollback()
+            self.__db.connection.rollback()
             return False
         return True
     
@@ -154,8 +152,8 @@ class AccountManager():
         try:
             app_logger.log('info', f"Attempting to fetch account details for account {account_number}")
             values = (account_number,)
-            self.db.cursor.execute(CHECK_ACC_EXISTS_Q, values)
-            result = self.db.cursor.fetchone()
+            self.__db.cursor.execute(CHECK_ACC_EXISTS_Q, values)
+            result = self.__db.cursor.fetchone()
             if result:
 
                 app_logger.log('info', f"Fetched account details for account {account_number}")
@@ -174,8 +172,8 @@ class AccountManager():
             app_logger.log('info', f"Fetching balance for sender account {sender_account_number}")
             
             values = (sender,)
-            self.db.cursor.execute(ONLY_BALANCE_Q , values)
-            result = self.db.cursor.fetchone()
+            self.__db.cursor.execute(ONLY_BALANCE_Q , values)
+            result = self.__db.cursor.fetchone()
             sender_balance = result[0] - Decimal(amount)
             self.update_balance(sender,sender_balance)
             app_logger.log('info', f"Sender account {sender_account_number} balance updated to {sender_balance}")
@@ -188,8 +186,8 @@ class AccountManager():
             app_logger.log('info', f"Fetching balance for receiver account {receiver_account_number}")
             
             values = (receiver,)
-            self.db.cursor.execute(ONLY_BALANCE_Q , values)
-            result = self.db.cursor.fetchone()
+            self.__db.cursor.execute(ONLY_BALANCE_Q , values)
+            result = self.__db.cursor.fetchone()
             receiver_balance = result[0] + Decimal(amount)
             self.update_balance(receiver,receiver_balance)
             app_logger.log('info', f"Receiver account {receiver_account_number} balance updated to {receiver_balance}")

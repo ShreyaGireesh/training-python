@@ -1,0 +1,27 @@
+2025-02-07 15:14:06,717 - INFO - User selected option 2: Deposit Amount
+2025-02-07 15:14:12,230 - INFO - Fetched account details for account ACC0000001: Savings, Balance: Rs.1200.00
+2025-02-07 15:14:14,124 - INFO - Transaction added: deposit of Rs 300.0 for account 1.
+2025-02-07 15:14:14,124 - INFO - Deposited Rs 300.0 to account ID 1. New balance: Rs.1500.00
+2025-02-07 15:14:14,125 - INFO - Deposited Rs 300.0 to account ACC0000001
+2025-02-07 15:14:20,885 - INFO - User selected option 4: Check Balance
+2025-02-07 15:14:26,566 - INFO - Fetched account details for account ACC0000001: Savings, Balance: Rs.1500.00
+2025-02-07 15:14:26,566 - INFO - Checked balance for account_number ACC0000001, balance: 1500.0
+2025-02-07 15:14:31,067 - INFO - User selected option 2: Deposit Amount
+2025-02-07 15:14:36,217 - INFO - Fetched account details for account ACC0000001: Savings, Balance: Rs.1500.00
+2025-02-07 15:14:38,783 - INFO - Transaction added: deposit of Rs 500.0 for account 1.
+2025-02-07 15:14:38,783 - INFO - Deposited Rs 500.0 to account ID 1. New balance: Rs.2000.00
+2025-02-07 15:14:38,783 - INFO - Deposited Rs 500.0 to account ACC0000001
+2025-02-07 15:14:42,131 - INFO - User selected option 4: Check Balance
+2025-02-07 15:14:47,184 - INFO - Fetched account details for account ACC0000001: Savings, Balance: Rs.2000.00
+2025-02-07 15:14:47,185 - INFO - Checked balance for account_number ACC0000001, balance: 2000.0
+2025-02-07 15:17:03,640 - INFO - User selected option 5: Get History
+2025-02-07 15:17:08,241 - INFO - Fetched account details for account ACC0000001: Savings, Balance: Rs.2000.00
+2025-02-07 15:17:08,244 - INFO - Fetched transaction history for account ACC0000001.
+2025-02-07 15:17:08,244 - INFO - Retrieved transaction history for account ACC0000001
+2025-02-07 15:17:25,175 - INFO - User selected option 5: Get History
+2025-02-07 15:17:29,970 - WARNING - Invalid account number or PIN for ACC0000002
+2025-02-07 15:17:29,970 - ERROR - Invalid account number or PIN for account ACC0000002
+2025-02-07 15:17:34,702 - INFO - User selected option 5: Get History
+2025-02-07 15:17:40,132 - INFO - Fetched account details for account ACC0000002: Current, Balance: Rs.600.00
+2025-02-07 15:17:40,134 - INFO - Fetched transaction history for account ACC0000002.
+2025-02-07 15:17:40,134 - INFO - Retrieved transaction history for account ACC0000002

@@ -5,10 +5,10 @@ from log_service import app_logger
 
 class BankManager:        
     def __init__(self, db):
-        self.db = db
-        self.user_manager = UserManager(self.db)
-        self.account_manager = AccountManager(self.db)
-        self.transaction = TransactionManager(self.db)
+        self.__db = db
+        self.user_manager = UserManager(self.__db)
+        self.account_manager = AccountManager(self.__db)
+        self.transaction = TransactionManager(self.__db)
 
     def new_account(self, name, address, phone_no, email, dob, gender):
         if not phone_no or not name:
@@ -192,7 +192,7 @@ class BankManager:
                 return
             success_msg = self.account_manager.transfer_amount(sender_account_id, receiver_account_id, amount, sender_account_number, to_account_number)
             app_logger.log('info', f"Successfully transferred {amount} from account {sender_account_number} to account {to_account_number}")
-            print(success_message)
+            print(success_msg)
         except Exception as e:
             app_logger.log('error', f"Error during transfer: {e}")
             print(f"An error occurred: {e}")

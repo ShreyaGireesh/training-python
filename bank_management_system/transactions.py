@@ -5,12 +5,12 @@ from log_service import app_logger
 
 class TransactionManager:
     def __init__(self, db):
-        self.db = db
+        self.__db = db
 
     def add_transaction(self, account_id, transaction_type, amount, balance_after ,description, transaction_id_related=None):
         try:
             # Start transaction
-            self.db.connection.start_transaction()
+            self.__db.connection.start_transaction()
 
             # Insert transaction into the 'transactions' table
             query = """
@@ -18,17 +18,17 @@ class TransactionManager:
                 VALUES (%s, %s, %s, %s, %s, %s)
             """
             values = (account_id, transaction_type, Decimal(amount), balance_after ,description, transaction_id_related)
-            self.db.cursor.execute(query, values)
+            self.__db.cursor.execute(query, values)
 
             # Commit the transaction
-            self.db.connection.commit()
+            self.__db.connection.commit()
             app_logger.log('info', f"Transaction added: {transaction_type} of Rs {amount} for account {account_id}.")
             return True
 
         except mysql.connector.Error as err:
             print(f"Error while adding transaction: {err}")
             app_logger.log('error', f"Error while adding transaction for account {account_id}: {err}")
-            self.db.connection.rollback()
+            self.__db.connection.rollback()
             return None
     
     def transaction_history(self, account_id, account_number):
@@ -41,8 +41,8 @@ class TransactionManager:
                 WHERE from_account = %s OR transaction_id_related = %s
                 ORDER BY transaction_date DESC
             """
-            self.db.cursor.execute(query, (account_id, account_id))
-            transactions = self.db.cursor.fetchall()
+            self.__db.cursor.execute(query, (account_id, account_id))
+            transactions = self.__db.cursor.fetchall()
             
             if transactions:
 
