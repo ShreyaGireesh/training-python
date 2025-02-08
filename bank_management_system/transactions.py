@@ -4,10 +4,39 @@ from datetime import datetime
 from log_service import app_logger
 
 class TransactionManager:
+    """
+    A class to manage transactions for user accounts.
+    
+    Attributes:
+        __db (Database): The database connection object.
+    """
     def __init__(self, db):
+        """
+        Initializes the TransactionManager with a database connection.
+        
+        Args:
+            db (Database): The database connection object to interact with the database.
+        """
         self.__db = db
 
     def add_transaction(self, account_id, transaction_type, amount, balance_after ,description, transaction_id_related=None):
+         """
+        Adds a new transaction to the 'transactions' table.
+        
+        Args:
+            account_id (int): The ID of the account for the transaction.
+            transaction_type (str): The type of transaction (e.g., 'Deposit', 'Withdrawal').
+            amount (float): The transaction amount.
+            balance_after (float): The account balance after the transaction.
+            description (str): A description of the transaction.
+            transaction_id_related (int, optional): The related transaction ID for this transaction (if any).
+        
+        Returns:
+            bool: True if the transaction was added successfully, None if an error occurred.
+        
+        Raises:
+            mysql.connector.Error: If there is an error while interacting with the database.
+        """
         try:
             # Start transaction
             self.__db.connection.start_transaction()
@@ -32,7 +61,19 @@ class TransactionManager:
             return None
     
     def transaction_history(self, account_id, account_number):
-        """Fetch and print transaction history for the given account."""
+        """
+        Fetches and displays the transaction history for a given account.
+        
+        Args:
+            account_id (int): The ID of the account for which the transaction history is being fetched.
+            account_number (str): The account number associated with the transactions.
+        
+        Returns:
+            None: Prints the transaction history to the console.
+        
+        Raises:
+            mysql.connector.Error: If there is an error while interacting with the database.
+        """
         try:
             # Fetch transaction history from the database
             query = """

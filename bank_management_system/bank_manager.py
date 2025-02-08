@@ -4,13 +4,43 @@ from transactions import TransactionManager
 from log_service import app_logger
 
 class BankManager:        
+    """
+    A class to manage banking operations such as user profile creation, account management,
+    transactions (deposit, withdrawal, transfer), and transaction history.
+    
+    Attributes:
+        __db (Database): The database connection object.
+        user_manager (UserManager): The user manager object responsible for user operations.
+        account_manager (AccountManager): The account manager object for handling account-related operations.
+        transaction (TransactionManager): The transaction manager object to handle transaction records.
+    """
     def __init__(self, db):
+        """
+        Initializes the BankManager with necessary dependencies.
+
+        Args:
+            db (Database): The database connection object to interact with the database.
+        """
         self.__db = db
         self.user_manager = UserManager(self.__db)
         self.account_manager = AccountManager(self.__db)
         self.transaction = TransactionManager(self.__db)
 
     def new_account(self, name, address, phone_no, email, dob, gender):
+        """
+        Creates a new user profile and account.
+
+        Args:
+            name (str): The name of the user.
+            address (str): The address of the user.
+            phone_no (str): The phone number of the user.
+            email (str): The email address of the user.
+            dob (str): The date of birth of the user in MM-DD-YYYY format.
+            gender (str): The gender of the user.
+        
+        Returns:
+            None: Prints the status of account creation.
+        """
         if not phone_no or not name:
             app_logger.log('warning', 'Some required fields are not filled!')
             print("Somre required fields are not filled!")
@@ -33,7 +63,12 @@ class BankManager:
             print("Error creating user account.")
     
     def get_account_type(self):
-        """Function to handle account type selection with validation."""
+        """
+        Handles the account type selection process and validates the input.
+
+        Returns:
+            str: The selected account type ("Savings", "Current", or "Salary").
+        """
         while True:
             print("\nSelect Account Type:")
             print("1. Savings")
@@ -59,7 +94,18 @@ class BankManager:
                 app_logger.log('warning', 'User entered invalid input for account type')
     
     def get_account_manager(self, account_type):
-        """Returns the correct AccountManager subclass (Current or Savings) based on account_type."""
+        """
+        Returns the correct AccountManager subclass (Current or Savings) based on account_type.
+
+        Args:
+            account_type (str): The type of account ("Savings", "Current", or "Salary").
+        
+        Returns:
+            AccountManager: The appropriate subclass of AccountManager based on the account type.
+        
+        Raises:
+            ValueError: If the account type is unknown.
+        """
         if account_type == "Savings":
             return SavingsAccount(self.db)  # You should pass any required parameters here, like db, balance, etc.
         elif account_type == "Current":
@@ -68,7 +114,12 @@ class BankManager:
             raise ValueError("Unknown account type")
 
     def check_balance(self):
-        
+        """
+        Checks and displays the balance of a given account.
+
+        Returns:
+            None: Prints the account balance or an error message if account is not found.
+        """
         account_number = input("Enter your account number: ")
 
         pin = input("Enter your PIN: ")
@@ -83,6 +134,12 @@ class BankManager:
 
 
     def deposit(self):
+        """
+        Deposits an amount into the given account.
+
+        Returns:
+            None: Prints the status of the deposit operation.
+        """
         account_no = input("Enter account number:")
         pin = input("Enter 4-digit pin:")
         account_details = self.account_manager.get_account(account_no, pin)
@@ -99,6 +156,12 @@ class BankManager:
             print("Account Not Found!")    
     
     def withdraw(self):
+        """
+        Withdraws an amount from the given account.
+
+        Returns:
+            None: Prints the status of the withdrawal operation.
+        """
         account_number = input("Enter account number: ")
         pin = input("Enter your PIN: ")
 
@@ -129,7 +192,12 @@ class BankManager:
             print("Invalid account type. Please try again.")
 
     def get_history(self):
+        """
+        Fetches and displays the transaction history for a given account.
 
+        Returns:
+            None: Prints the transaction history or an error message if account is not found.
+        """
         account_number = input("Enter account number: ")
         pin = input("Enter your PIN: ")
 
@@ -145,11 +213,22 @@ class BankManager:
         app_logger.log('info', f"Retrieved transaction history for account {account_number}")
     
     def account_info(self):
+        """
+        Displays the details of a given account.
+
+        Returns:
+            None: Prints the account details or an error message if account is not found.
+        """
         account_no = input("Enter account no:")
         self.account_manager.display_account_details(account_no)
 
     def transfer(self):
-        """Transfer amount from one account to another."""
+         """
+        Transfers an amount from one account to another.
+
+        Returns:
+            None: Prints the status of the transfer operation or an error message.
+        """
         try:
             sender_account_number = input("Enter your account number: ")
             sender_pin = input("Enter your PIN: ")

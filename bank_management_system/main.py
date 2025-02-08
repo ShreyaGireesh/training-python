@@ -15,6 +15,11 @@ valid_input = True
 
 match choice:
     case 1:
+         """
+        Handles account creation by collecting user details and validating them.
+        If the inputs are valid, the new account is created using BankManager.
+        Logs and prints error messages if any input is invalid.
+        """
         app_logger.log('info', "User selected option 1: Create Account")
         name = input("Enter your name: ")
         address = input("Enter your address: ")
@@ -47,25 +52,60 @@ match choice:
         else:
             app_logger.log('error', 'Invalid account details')
             print(constants.INVALID_ACC_DETAILS_MSG)
+            
     case 2: 
+        """
+        Handles depositing money into an existing account.
+        Logs the action and performs the deposit operation through BankManager.
+        """
         app_logger.log('info', "User selected option 2: Deposit Amount")
         bank_manager.deposit()
+
     case 3:
+        """
+        Handles withdrawing money from an existing account.
+        Logs the action and performs the withdrawal operation through BankManager.
+        """
         app_logger.log('info', "User selected option 3: Withdraw Amount")
         bank_manager.withdraw()
+
     case 4:
+        """
+        Allows the user to check the balance of their account.
+        Logs the action and fetches the balance through BankManager.
+        """
         app_logger.log('info', "User selected option 4: Check Balance")
         bank_manager.check_balance()
+
     case 5:
+        """
+        Retrieves the transaction history of the user’s account.
+        Logs the action and fetches transaction history through BankManager.
+        """
         app_logger.log('info', "User selected option 5: Get History")
         bank_manager.get_history()
+
     case 6:
+        """
+        Displays account details of the user’s account.
+        Logs the action and fetches account details through BankManager.
+        """
         app_logger.log('info', "User selected option 6: Account Info")
         bank_manager.account_info()
+
     case 7:
+         """
+        Allows the user to transfer money to another account.
+        Logs the action and performs the transfer operation through BankManager.
+        """
         app_logger.log('info', "User selected option 7: Transfer Amount to another Account")
         bank_manager.transfer()
+
     case _:
+        """
+        Handles invalid user input for selecting options.
+        Logs a warning message and prints a user-friendly error message.
+        """
         app_logger.log('warning', "User selected option invalid option")
         print("Invalid choice!")
     
