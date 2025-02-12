@@ -73,7 +73,6 @@ class BankManager:
             print("\nSelect Account Type:")
             print("1. Savings")
             print("2. Current")
-            print("3. Salary")
             
             try:
                 account_choice = int(input("Enter your choice (1, 2, or 3): "))
@@ -83,9 +82,6 @@ class BankManager:
                 elif account_choice == 2:
                     app_logger.log('info', 'User selected Current account type')
                     return "Current"
-                elif account_choice == 3:
-                    app_logger.log('info', 'User selected Salary account type')
-                    return "Salary"
                 else:
                     print("Invalid option. Please choose a valid account type.")
                     app_logger.log('warning', 'User entered invalid account type choice')
