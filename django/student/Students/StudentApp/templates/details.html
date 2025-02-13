@@ -1,0 +1,56 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            width: 400px;
+            margin: 20px;
+        }
+        .container div {
+            margin-bottom: 15px;
+        }
+        p {
+            font-size: 20px;
+            color: #333;
+            margin: 5px 0;
+        }
+        p strong {
+            color: #555;
+        }
+        .container p {
+            background-color: #e0e0e0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div>
+        <p><strong>Name:</strong> {{student.name}}</p>
+        <p><strong>Class:</strong> {{student.standard}}</p>
+        <p><strong>Gender:</strong> {{student.gender}}</p>
+        <p><strong>Date of Birth:</strong> {{student.dob}}</p>
+        <p><strong>Age:</strong> {{student.age}}</p>
+        <p><strong>Address:</strong> {{student.address}}</p>
+        <p><strong>Contact Number:</strong> {{student.phone_no}}</p>
+    </div>
+    </div>
+</body>
+</html>
