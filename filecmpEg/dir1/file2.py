@@ -1,0 +1,1 @@
+print("file 2 inside sub dir")

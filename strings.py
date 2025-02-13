@@ -1,0 +1,10 @@
+str1 = "hello world!"
+print(str1[0])
+print(str1[2:5])
+print(str1[-2:])
+print(str1[:2]+str1[2:])
+print(len(str1))
+print(str1[3:30])
+print('J'+str1[1:])
+print(str1.capitalize())
+print(str1.count('o'))
