@@ -3,12 +3,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        button{
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #555;
+
+            font-size: 16px;
+        }
+        button a{
+            text-decoration: none;
+            color: white;
+        }
+    </style>
 </head>
 <body>
     <div>
         <h3>
             All Students
         </h3>
+        <button type="button"><a href="{% url 'student_create' %}">+ Add Student</a></button>
         <ul>
             {% for student in students %}
             <li><a href="{% url 'details' student.id%}">{{student.name}}</a></li>

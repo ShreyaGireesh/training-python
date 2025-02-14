@@ -1,5 +1,5 @@
 """
-URL configuration for Students project.
+URL configuration for TaskManager project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.1/topics/http/urls/
@@ -17,12 +17,10 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
-from StudentApp import views
-from StudentApp.views import StudentCreateView
+from TaskApp import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("",  views.index, name="index"),
-    path("details/<int:id>", views.get_detail, name='details'),
-    path('create/', StudentCreateView.as_view(), name='student_create'),
+    path('', views.task_list, name='task_list'),
+    path('create/', views.task_create, name='task_create'),
 ]
