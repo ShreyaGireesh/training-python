@@ -24,7 +24,7 @@ async function fetchCartItems() {
             }
         });
         if (response.status === 401) { // Unauthorized, token might be expired
-            console.warn("Access token expired, trying to refresh... 🔄");
+            console.warn("Access token expired, trying to refresh...");
             await refreshToken(); // Call refresh function from auth.js
             return fetchCartItems(); // Retry fetching products after refresh
         }

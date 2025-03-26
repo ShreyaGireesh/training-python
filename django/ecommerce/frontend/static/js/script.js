@@ -100,12 +100,12 @@ function renderProducts(products, role, userid){
         productContainer.appendChild(productCard);
     });
 
-    document.querySelectorAll(".add-to-cart").forEach(button => {
-        button.addEventListener("click", function () {
-            let productId = this.getAttribute("data-id");
-            addToCart(productId);
-        });
-    });
+    // document.querySelectorAll(".add-to-cart").forEach(button => {
+    //     button.addEventListener("click", function () {
+    //         let productId = this.getAttribute("data-id");
+    //         addToCart(productId);
+    //     });
+    // });
 
     if (role === "Seller" || role === "Admin") {
         document.getElementById("addProductBtn").addEventListener("click", () => {

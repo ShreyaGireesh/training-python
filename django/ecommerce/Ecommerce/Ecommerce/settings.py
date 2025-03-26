@@ -13,9 +13,15 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 from datetime import timedelta
+import sys
+import django.utils.autoreload
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+LOGGING_DIR = os.path.join(BASE_DIR, '..', 'log')
+
+if not os.path.exists(LOGGING_DIR):
+    os.makedirs(LOGGING_DIR)
 
 
 # Quick-start development settings - unsuitable for production
@@ -25,7 +31,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-#!&kmrj+gl668s%3sk9pkz_kxq+pg+c6-0y0^&9j_948(+i-q^"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False 
 
 ALLOWED_HOSTS = ['*']
 
@@ -50,7 +56,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    # "Ecommerce.middleware.middleware.CustomErrorMiddleware",
+    "Ecommerce.middleware.middleware.APILoggingMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -178,3 +184,33 @@ SIMPLE_JWT = {
     "BLACKLIST_AFTER_ROTATION": True,  # Ensures old refresh tokens cannot be reused
     "ROTATE_REFRESH_TOKENS": False,
 }
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(LOGGING_DIR, 'api_requests.log'),
+            'formatter': 'detailed',
+        },
+    },
+    'formatters': {
+        'detailed': {
+            'format': '[{asctime}] {levelname} {message}',
+            'style': '{',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}
+
+if 'runserver' in sys.argv:
+    django.utils.autoreload.WATCHED_FILES_FILTER = lambda path: 'log' not in path

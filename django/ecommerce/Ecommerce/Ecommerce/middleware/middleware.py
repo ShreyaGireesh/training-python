@@ -1,19 +1,32 @@
-from django.http import HttpResponseRedirect
+import logging
+import traceback
+from datetime import datetime
 
-class CustomErrorMiddleware:
+logger = logging.getLogger(__name__)
+
+class APILoggingMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
-        print("✅ CustomErrorMiddleware is executing!")
+        request_time = datetime.now()
+        logger.info(f"[API REQUEST] {request.method} {request.path} at {request_time}")
+
         try:
             response = self.get_response(request)
-            # 🚨 Manually raise an exception to test middleware behavior
-            raise ValueError("Test exception inside middleware")  
         except Exception as e:
-            print(f"⚠️ Exception caught in middleware: {e}")  # Log the error
-            return self.handle_exception(request)
+            # Log the exception details
+            error_time = datetime.now()
+            error_traceback = traceback.format_exc()  # Full error traceback
+            logger.error(f"[API ERROR] {request.method} {request.path} at {error_time}")
+            logger.error(f"Exception: {str(e)}")
+            logger.error(f"Traceback:\n{error_traceback}")
 
-    def handle_exception(self, request):
-        print("🔄 Redirecting to external error page...")
-        return HttpResponseRedirect("http://127.0.0.1:5500/frontend/error.html")
+            # Return a custom error response (optional)
+            from django.http import JsonResponse
+            return JsonResponse({'error': 'Internal Server Error'}, status=500)
+
+        response_time = datetime.now()
+        logger.info(f"[API RESPONSE] {request.method} {request.path} - {response.status_code} at {response_time}")
+
+        return response
